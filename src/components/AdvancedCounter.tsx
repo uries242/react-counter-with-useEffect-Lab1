@@ -1,10 +1,13 @@
 import { useState, useEffect } from "react";
 
 function AdvancedCounter() {
-  const [count, setCount] = useState(0);
   const [step, setstep] = useState(1);
   const [history, setHistory] = useState<number[]>([]);
-  
+
+  const [count, setCount] = useState(() => {
+    const saved = localStorage.getItem("count");
+    return saved !== null ? Number(saved) : 0;
+  });
 
   useEffect(() => {
     document.title = `Count: ${count}`;
@@ -14,11 +17,17 @@ function AdvancedCounter() {
     setHistory((prev) => [...prev, count]);
   }, [count]);
 
-  const reset = () => {
-    setCount(0)
-    setHistory([])
-  }
+  useEffect(() => {
+    localStorage.setItem("count", String(count));
+  }, [count]);
 
+  const reset = () => {
+    setCount(0);
+    setHistory([]);
+  };
+
+
+  
   return (
     <>
       <section id="center">
@@ -27,11 +36,23 @@ function AdvancedCounter() {
           <p>Current count: {count}</p>
         </div>
 
-        <button type="button" onClick={() => setCount((count) => count - step)}> Decrement </button>
-        <button type="button" onClick={() => setCount((count) => count + step)}> Increment </button>
-        <button type="button" onClick={reset}> Reset </button>
+        <button type="button" onClick={() => setCount((count) => count - step)}>
+          {" "}
+          Decrement{" "}
+        </button>
+        <button type="button" onClick={() => setCount((count) => count + step)}>
+          {" "}
+          Increment{" "}
+        </button>
+        <button type="button" onClick={reset}>
+          {" "}
+          Reset{" "}
+        </button>
 
-        <label> Step Value: <input
+        <label>
+          {" "}
+          Step Value:{" "}
+          <input
             type="number"
             value={step}
             onChange={(event) => setstep(Number(event.target.value))}
@@ -47,7 +68,6 @@ function AdvancedCounter() {
           <li key={i}>{val}</li>
         ))}
       </ul>
-
     </>
   );
 }

@@ -9,6 +9,10 @@ function AdvancedCounter() {
     document.title = `Count: ${count}`;
   }, [count]);
 
+  useEffect(() => {
+    setHistory((prev) => [...prev, count]);
+  }, [count]);
+
   return (
     <>
       <section id="center">
@@ -36,7 +40,13 @@ function AdvancedCounter() {
           />
         </label>
         <p>Changes saved</p>
-        <br />
+
+        <ul>
+          {history.map((val, i) => (
+            <li key={i}>{val}</li>
+          ))}
+        </ul>
+        
       </section>
       <p>Count History:</p>
       <section id="spacer"></section>

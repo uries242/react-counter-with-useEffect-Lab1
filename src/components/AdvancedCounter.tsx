@@ -26,8 +26,22 @@ function AdvancedCounter() {
     setHistory([]);
   };
 
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "ArrowUp") {
+        setCount((prev) => prev + step);
+      } else if (event.key === "ArrowDown") {
+        setCount((prev) => prev - step);
+      }
+    };
 
-  
+    document.addEventListener("keydown", handleKeyDown);
+
+    return () => {
+      document.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [step]);
+
   return (
     <>
       <section id="center">

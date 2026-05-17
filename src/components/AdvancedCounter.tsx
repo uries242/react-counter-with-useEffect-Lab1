@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 
+
 function AdvancedCounter() {
   const [step, setstep] = useState(1);
   const [history, setHistory] = useState<number[]>([]);
@@ -28,10 +29,13 @@ function AdvancedCounter() {
 
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
-      if (event.key === "ArrowUp") {
-        setCount((prev) => prev + step);
-      } else if (event.key === "ArrowDown") {
-        setCount((prev) => prev - step);
+      if (event.key === "ArrowUp" || event.key === "ArrowDown") {
+        event.preventDefault(); // stops page scroll
+        if (event.key === "ArrowUp") {
+          setCount((prev) => prev + step);
+        } else {
+          setCount((prev) => prev - step);
+        }
       }
     };
 
@@ -50,22 +54,12 @@ function AdvancedCounter() {
           <p>Current count: {count}</p>
         </div>
 
-        <button type="button" onClick={() => setCount((count) => count - step)}>
-          {" "}
-          Decrement{" "}
-        </button>
-        <button type="button" onClick={() => setCount((count) => count + step)}>
-          {" "}
-          Increment{" "}
-        </button>
-        <button type="button" onClick={reset}>
-          {" "}
-          Reset{" "}
-        </button>
+        <button type="button" onClick={() => setCount((count) => count - step)}> Decrement </button>
+        <button type="button" onClick={() => setCount((count) => count + step)}> Increment </button>
+        <button type="button" onClick={reset}> Reset </button>
 
         <label>
-          {" "}
-          Step Value:{" "}
+          Step Value:
           <input
             type="number"
             value={step}
@@ -82,6 +76,7 @@ function AdvancedCounter() {
           <li key={i}>{val}</li>
         ))}
       </ul>
+      <p>Use ArrowUp to increment and ArrowDown to decrement</p>
     </>
   );
 }
